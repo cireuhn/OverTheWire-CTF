@@ -8,3 +8,6 @@ ls , cd , cat , file , du , find
 Helpful Reading Material  
 Google Search for “spaces in filename”  
 ***
+I used *cat* spaces but used tab to get the result  
+![Alt text](<Images/Level 3.png>)  
+aBZ0W5EmUfAf7kHTQeOwd8bauFJ2lAiG

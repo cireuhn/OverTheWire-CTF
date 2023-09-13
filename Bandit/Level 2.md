@@ -14,5 +14,5 @@ Advanced Bash-scripting Guide - Chapter 3 - Special Characters
 
 Initally I was unable to use *cat* - on this challenge. I found it is best to avoid using filenames that start with a dash, but if you do need to use one, be sure to use the ./ prefix to avoid confusion.
 
-![Alt text](<Images/Level 2.png>)
+![Alt text](<Images/Level 2.png>)  
 rRGizSaX8Mk1RTb1CNQoXTcYZWU6lgzi
