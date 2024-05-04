@@ -2,121 +2,116 @@
 
 ## Part 1. Change the VM’s IP address and hostname to lst1 
 
-1. Create a new file for netplan.
-- I created a file called static.yaml
-- Format for a Static IP address is as follows in netplan :
-```
-network:
-  ethernets:
-    ens33:
-      dhcp4: false
-      addresses: [192.168.10.201/24]
-      nameservers:
-        addresses: [192.168.10.1]
-      routes:
-      - to: default
-        via: 192.168.10.1
-  version: 2
-```
-2. Apply new file by performing ``` sudo netplan appply ```  
+1. **Create a new file for netplan.**
+    - Created a file called `static.yaml`.
+    - Format for a Static IP address in netplan:
+    ```yaml
+    network:
+      ethernets:
+        ens33:
+          dhcp4: false
+          addresses: [192.168.10.201/24]
+          nameservers:
+            addresses: [192.168.10.1]
+          routes:
+          - to: default
+            via: 192.168.10.1
+      version: 2
+    ```
+    - Apply new file: `sudo netplan apply`  
 
-Submit a screenshot displaying the netplan yaml file and that the IP address was changed.  
-![alt text](/Linux%20Server%20Technologies/Lab_Images/lab1-1.png)
+    ![Netplan yaml file and IP address change](/Linux%20Server%20Technologies/Lab_Images/lab1-1.png)
 
-3. Change hostname of the device
+2. **Change hostname of the device**
+    - Verify with `hostnamectl`.
+    - Set a new hostname: `sudo hostnamectl set-hostname lst1`.
 
-- Verify by performing ```hostnamectl```
+    ![New hostname](/Linux%20Server%20Technologies/Lab_Images/lab1-2.png)
 
-- Set a new hostname:
-``` sudo hostnamectl set-hostname lst1```
-
-Submit a screenshot displaying the new hostname.
-![alt text](/Linux%20Server%20Technologies/Lab_Images/lab1-2.png)  
 ## Part 2. Install stress-ng
 
-- Verify if it exist by performing ``` apt list | grep stress-ng```
-- Install by performing ``` apt install stress-ng```
+- Verify if it exists: `apt list | grep stress-ng`.
+- Install: `apt install stress-ng`.
 
-Submit a screenshot showing that stress-ng is installed.
-![alt text](/Linux%20Server%20Technologies/Lab_Images/lab1-3.png)
+![stress-ng installation](/Linux%20Server%20Technologies/Lab_Images/lab1-3.png)
+
 ## Part 3. Create a bob and alice account. Create an adminjr group.
 
-1. Create user bob and alice
-- Perform:
-```sudo adduser bob```
-```sudo adduser alice```
-```sudo groupadd adminjr```
+1. **Create user bob and alice**
+    - Commands:
+    ```bash
+    sudo adduser bob
+    sudo adduser alice
+    sudo groupadd adminjr
+    ```
 
-Login as bob and attempt to change alice’s password.
-Submit a screenshot of bob’s failed attempt to change alice’s password.
-![alt text](/Linux%20Server%20Technologies/Lab_Images/lab1-4.png)  
+    ![Failed attempt to change password](/Linux%20Server%20Technologies/Lab_Images/lab1-4.png)
 
-Configure the adminjr group to change passwords.
+2. **Configure the adminjr group to change passwords**
+    - Edit the sudoers file: Add `%adminjr ALL=(ALL) /usr/bin/passwd` to the end of the file.
 
-2. Edit the sudoers file:
- - Add ```%adminjr ALL=(ALL) /usr/bin/passwd``` to the end of the file
+3. **Add bob to the adminjr group**
+    - Command: `sudo usermod -aG adminjr bob`.
+    - Verify with `groups bob`.
 
-Add bob to the adminjr group.
+    ![Bob changing Alice's password](/Linux%20Server%20Technologies/Lab_Images/lab1-5.png)
 
-3. ```sudo usermod -aG adminjr bob```
-- Verify `groups bob`
-Submit a screenshot of bob changing alice’s passwd.
-![alt text](/Linux%20Server%20Technologies/Lab_Images/lab1-5.png)  
+## Part 4. Install SAR, execute the cpubusy script, and show CPU stress
 
-## Part 4. Install SAR execute the cpubusy script and show CPU stress
+1. **Install sysstat**
+    - Verify if it exists: `apt list | grep sysstat`.
+    - Install: `apt install sysstat`.
 
-Install sysstat. Verify installation
 
-4. `apt install stasstat`
+2. **Download cpubusy.py**
+    - Download this file from the repository provided by the instructor.
+    - Transfer the file from your local machine to the VM using WinSCP.
+    - Change the File protocol to `SCP` in WinSCP settings.
 
-Download cpubusy.py
+    ![WinSCP Settings](/Linux%20Server%20Technologies/Lab_Images/lab1-6.png)
 
-- Download this file from the repository from the instructor.
-- Transfer over from local machine to VM using WinSCP
-- Swap File protocol to `SCP`
-- Host name field should be IP address of Destination (VM)
-- Using port 22 to leverage SSH
-- Drag file from local machine to VM
+3. **Execute cpubusy script and show CPU stress**
+    - Run the script: `python3 cpubusy.py`.
+    - Monitor CPU performance using SAR: `sar -u 1 20`.
 
-![alt text](/Linux%20Server%20Technologies/Lab_Images/lab1-6.png)
+    ![CPU stress](/Linux%20Server%20Technologies/Lab_Images/lab1-7.png)
 
-Using sar demonstrate that the CPU performance is degraded when executing the spubus.py script.
+## Part 5. Install Cockpit
 
-5. Run the cpubusy.py script on the VM machine
-- `./cpybusy.py`
-- Open another terminal to perform sar to see CPU degradation
-- When the VM is running the script, you will not be able to perform any additional actions on the VM
+1. **Update the package list**
+    - Command: `sudo apt update`.
 
-Submit a screenshot of the CPU’s degraded performance
-![alt text](/Linux%20Server%20Technologies/Lab_Images/lab1-7.png)
-## Part 5. Install cockpit
+2. **Install Cockpit**
+    - Command: `sudo apt install cockpit`.
 
-- `sudo apt update`
-- `sudo apt install cockpit`
-- `sudo systemctl enable --now cockpit.socket`
+3. **Enable Cockpit**
+    - Command: `sudo systemctl enable --now cockpit.socket`.
 
-- On another computer on the same network (192.168.10.0/24 in my example), open a web browser and go to https://<VM IP>:9090
-Submit a screenshot with the cockpit login screen.
-![alt text](/Linux%20Server%20Technologies/Lab_Images/lab1-8.png)
+4. **Access Cockpit**
+    - On another computer on the same network (192.168.10.0/24 in my example), open a web browser and go to `https://<VM IP>:9090`.
+
+    ![Cockpit login screen](/Linux%20Server%20Technologies/Lab_Images/lab1-8.png)
 
 ## Part 6. Restrict access to SSH
 
-Modify your server’s SSH configuration to allow only the RemoteUsers group to use the SSH services.
-Add Bob to the RemoteUsers group. 
-1. Create the "RemoteUsers" group:
-- `sudo groupadd RemoteUsers`
-2. Add bob to the "RemoteUsers" group:
-- `sudo usermod -aG RemoteUsers bob`
-3. Edit the SSH configuration file:
-- `sudo nano /etc/ssh/sshd_config`
-4. Added a `AllowGroups` line and added "RemoteUsers" to it
-- `AllowGroups RemoteUsers`
-5. Restart the SSH service:
-- `sudo systemctl restart sshd`
+**Objective:** Modify your server’s SSH configuration to allow only the RemoteUsers group to use the SSH services.
 
-Submit a screenshot of Bob and Alice's attempt to SSH to the lst1 server.
-- Bob successfully SSH to lst1  
-![alt text](/Linux%20Server%20Technologies/Lab_Images/lab1-9.png)
-![alt text](/Linux%20Server%20Technologies/Lab_Images/lab1-10.png)
-- Alice is unsuccessful even with the correct password
-![alt text](image.png)
+1. **Create the "RemoteUsers" group**
+    - Command: `sudo groupadd RemoteUsers`.
+
+2. **Add bob to the "RemoteUsers" group**
+    - Command: `sudo usermod -aG RemoteUsers bob`.
+
+3. **Modify SSH configuration**
+    - Open the SSH configuration file: `sudo nano /etc/ssh/sshd_config`.
+    - Add an `AllowGroups` line and include "RemoteUsers" in it: `AllowGroups RemoteUsers`.
+
+4. **Restart the SSH service**
+    - Command: `sudo systemctl restart sshd`.
+
+5. **Test SSH access**
+    - Bob should be able to SSH to lst1.
+    - Alice should not be able to SSH to lst1, even with the correct password.
+
+    ![Bob's successful SSH](/Linux%20Server%20Technologies/Lab_Images/lab1-10.png)  
+    ![Alice's unsuccessful SSH](/Linux%20Server%20Technologies/Lab_Images/lab1-11.png)
