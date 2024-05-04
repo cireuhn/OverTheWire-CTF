@@ -65,6 +65,7 @@
 
 2. **Download cpubusy.py**
     - Download this file from the repository provided by the instructor.
+    - Download and install WinSCP
     - Transfer the file from your local machine to the VM using WinSCP.
     - Change the File protocol to `SCP` in WinSCP settings.
 
