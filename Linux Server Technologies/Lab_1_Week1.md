@@ -108,7 +108,7 @@
     - Add an `AllowGroups` line and include "RemoteUsers" in it: `AllowGroups RemoteUsers`.
 
 4. **Restart the SSH service**
-    - Command: `sudo systemctl restart sshd`.
+    - Command: `sudo systemctl restart ssh`.
 
 5. **Test SSH access**
     - Bob should be able to SSH to lst1.

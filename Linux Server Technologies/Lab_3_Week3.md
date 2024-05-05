@@ -12,15 +12,34 @@ Submit screenshots of:
 
 Transfer the trace file on `lst1` to Wireshark on another VM or host machine with Wireshark installed. Open the trace file. Click on the first packet and display the Transmission Control Protocol layer.
 
+- Install WireShark on another VM/host machine
+- Use WinSCP to transfer the file over to another VM/host machine
+
 Submit a screenshot of the TCP layer detail in Wireshark.
+
+![alt text](/Linux%20Server%20Technologies/Lab_Images/lab3-1.png)
 
 ## TASK #3
 
 Enable SSH and Cockpit ports on `lst1` using UFW. You will have to enable UFW. Increase logging to high. Using `netcat` or `telnet`, try to access `lst1` TCP port 25.
 
+- Enable UFW by performing `sudo ufw enable`
+- The default policy is to deny all incoming traffic and allow all outbound traffic
+- Allow SSH `sudo ufw allow 22`
+- Allow Cockpit `sudo ufw allow 9090`
+- Verify UFW rules `sudo ufw status numbered`
+
+- Set UFW logging to high `sudo ufw logging high`
+- Verify logging was set to high `sudo ufw status verbose`
+
+- View UFW logs `cat /var/log/ufw.log | tail`
+
 Submit screenshots of:
 - The UFW log showing the packets attempting to use port 25.
+![alt text](/Linux%20Server%20Technologies/Lab_Images/lab3-2.png)
+
 - The current rules in verbose mode for UFW.
+![alt text](/Linux%20Server%20Technologies/Lab_Images/lab3-3.png)
 
 ## TASK #4
 

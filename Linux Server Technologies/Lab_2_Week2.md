@@ -5,6 +5,9 @@ Using either your host computer or a VM, configure secure SSH using a certificat
 - `ssh-keygen -t ed25519 -C "lst2"
 - The -C "lst2" adds a lst2 comment to the key
 
+- Do not put a passphrase and just press enter
+- If you put a passphrase, it will ask you for a password when you use certificates to authenticate
+
 2. Verify the public and private keys were created
 
 - `ls -l .ssh`
